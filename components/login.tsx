@@ -1,85 +1,84 @@
-"use client";
+'use client'
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { loginSchema } from "@/lib/zod";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import Image from 'next/image'
 
-export default function LoginForm() {
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+const schema = z.object({
+  email: z.string().email({ message: "Correo electrónico inválido" }),
+  password: z.string().min(6, { message: "La contraseña debe tener al menos 6 caracteres" }),
+})
 
-  const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    console.log(values);
-  };
+type FormData = z.infer<typeof schema>
+
+export default function LoginPage() {
+  const [isLoading, setIsLoading] = useState(false)
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+    resolver: zodResolver(schema)
+  })
+
+  const onSubmit = async (data: FormData) => {
+    setIsLoading(true)
+    // Aquí iría la lógica de autenticación
+    console.log(data)
+    setIsLoading(false)
+  }
 
   return (
-    <Card className="w-[350px]">
-      <CardHeader>
-        <CardTitle>Iniciar Sesión</CardTitle>
-        <CardDescription>Ingresa tus credenciales para acceder</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="tu@email.com" type="email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+    <div className="min-h-screen flex items-center justify-center" style={{ 
+      backgroundImage: "url('/images/carr.png')", 
+      backgroundSize: 'cover', 
+      backgroundPosition: 'center', 
+      backgroundRepeat: 'no-repeat',
+      height: '100vh',
+      width: '100vw',
+    }}>
+      <div className="bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-xl w-full max-w-md">
+        <Image 
+          src="/images/car.png" 
+          alt="Logo de la empresa" 
+          className="mx-auto mb-1" 
+          width={192} 
+          height={48} 
+        />
+        <h1 className="text-2xl font-bold mb-2 text-center text-gray-800">Iniciar Sesión</h1> 
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+              Correo Electrónico
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="usuario@email.com"
+              {...register('email')}
+              className={errors.email ? "border-red-500" : ""}
             />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contraseña</FormLabel>
-                  <FormControl>
-                    <Input placeholder="••••••••" type="password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+              Contraseña
+            </Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              {...register('password')}
+              className={errors.password ? "border-red-500" : ""}
             />
-            <Button
-              className="w-full"
-              type="submit"
-              onClick={form.handleSubmit(onSubmit)}
-            >
-              Iniciar Sesión
-            </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
-  );
+            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
+          </div>
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Cargando..." : "Iniciar Sesión"}
+          </Button>
+        </form>
+      </div>
+    </div>
+  )
 }

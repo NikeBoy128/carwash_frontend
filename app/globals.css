@@ -134,7 +134,7 @@ body {
 
 /* estilos dashboard */
 
-/* globals.css */
+
 .dashboard-container {
   display: flex;
   min-height: 100vh;
@@ -152,12 +152,12 @@ body {
 }
 
 .sidebar-title {
-  font-size: 1.5rem; /* Tamaño de fuente para el título de la sidebar */
+  font-size: 1.5rem; 
 }
 
 .sidebar-link {
   display: block;
-  padding: 0.75rem 1rem; /* Padding aumentado */
+  padding: 0.75rem 1rem; 
   color: #4b5563;
   transition: background-color 0.2s, color 0.2s;
 }

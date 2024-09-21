@@ -1,14 +1,13 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const schema = z.object({
   vehicleType: z.string().min(1, { message: "Seleccione el tipo de vehículo" }),
@@ -19,22 +18,21 @@ const schema = z.object({
   condition: z.string().min(1, { message: "Seleccione la condición del vehículo" }),
   service: z.string().min(1, { message: "Seleccione el servicio a realizar" }),
   notes: z.string().optional(),
-})
+});
 
-type FormData = z.infer<typeof schema>
+type FormData = z.infer<typeof schema>;
 
 export default function NewWashPage() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
-    resolver: zodResolver(schema)
-  })
+    resolver: zodResolver(schema),
+  });
 
   const onSubmit = async (data: FormData) => {
-    setIsLoading(true)
-    // Aquí iría la lógica para guardar el nuevo lavado
-    console.log(data)
-    setIsLoading(false)
-  }
+    setIsLoading(true);
+    console.log(data);
+    setIsLoading(false);
+  };
 
   return (
     <Card className="max-w-2xl mx-auto my-8">
@@ -113,7 +111,7 @@ export default function NewWashPage() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="notes">Notas Adicionales</Label>
-            
+            <Input id="notes" {...register('notes')} />
           </div>
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? "Guardando..." : "Registrar Nuevo Lavado"}
@@ -121,5 +119,5 @@ export default function NewWashPage() {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }

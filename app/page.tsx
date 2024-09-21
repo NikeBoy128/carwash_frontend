@@ -1,13 +1,18 @@
-//import DashboardPage from "@/components/dashboard";
+//import DashboardPage from "@/app/dashboard/dashboard";
+
+import LoginForm from "./login/page";
 
 //import NewWashPage from "@/components/lavado";
-import LoginForm from "@/components/login";
+
 
 
 export default function Home() {
   return (
 
     <LoginForm/>
+    
+    //<DashboardPage/>
+    //<NewWashPage/>
     
   );
 }

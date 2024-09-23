@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { signInAction } from "@/actions/auth.actions";
+import { toast } from "sonner";
 
 export default function LoginForm() {
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -31,8 +33,14 @@ export default function LoginForm() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+    const response = await signInAction(values);
+    console.log(response);
+    if (response?.error) {
+      toast.error(response.error, {
+        className: "bg-red-500 text-white flex items-center p-4 rounded",
+      });
+    }
   };
 
   return (

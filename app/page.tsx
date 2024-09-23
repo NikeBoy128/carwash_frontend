@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div className="flex h-screen">
-      <div className="hidden md:flex w-1/2 items-center justify-center bg-blue-950">
+      <div className="hidden md:flex w-1/2 items-center justify-center bg-black-950">
         <Image
           src="/logo.webp"
           width={500}

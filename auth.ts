@@ -43,8 +43,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             },
           });
 
-          console.log({ ...sessionData.data, ...tokenData.data });
-
           return { ...sessionData.data, ...tokenData.data };
         } catch (e) {
           if (axios.isAxiosError(e)) {

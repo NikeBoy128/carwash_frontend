@@ -42,7 +42,9 @@ export default function LoginForm() {
         className: "bg-red-500 text-white flex items-center p-4 rounded",
       });
     }
-    roter.push("/dashboard");
+    if (response?.success) {
+      roter.push("/dashboard");
+    }
   };
 
   return (

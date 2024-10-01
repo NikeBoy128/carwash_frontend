@@ -23,8 +23,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { signInAction } from "@/actions/auth.actions";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
+  const roter = useRouter();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -40,6 +42,7 @@ export default function LoginForm() {
         className: "bg-red-500 text-white flex items-center p-4 rounded",
       });
     }
+    roter.push("/dashboard");
   };
 
   return (

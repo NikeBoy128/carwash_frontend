@@ -21,7 +21,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
 }
 
-// Componente de tabla
+
 export function DataTable<TData, TValue>({
   columns,
   data,

@@ -1,5 +1,5 @@
-// WelcomeMessage.tsx
-"use client"; // Asegúrate de agregar esta línea
+
+"use client"; 
 
 import React, { useEffect, useState } from "react";
 
@@ -9,9 +9,9 @@ const WelcomeMessage = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setVisible(false);
-    }, 2000); // Desaparece después de 2 segundos
+    }, 2000); 
 
-    return () => clearTimeout(timer); // Limpiar el temporizador al desmontar
+    return () => clearTimeout(timer); 
   }, []);
 
   return (

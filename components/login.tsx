@@ -1,4 +1,4 @@
-// Modificación en components/LoginForm.tsx
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -25,7 +25,7 @@ import { Button } from "@/components/ui/button";
 import { signInAction } from "@/actions/auth.actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { useSpring, animated } from '@react-spring/web'; // Importa react-spring
+import { useSpring, animated } from '@react-spring/web'; 
 import { useEffect } from "react";
 
 export default function LoginForm() {
@@ -46,7 +46,6 @@ export default function LoginForm() {
       });
     }
     if (response?.success) {
-      // Redirigir al dashboard después de un breve retraso para que se pueda ver el mensaje de bienvenida
       setTimeout(() => {
         router.push("/dashboard");
       }, 2000); // 2 segundos de retraso para la visualización

@@ -86,7 +86,7 @@ export default function DemoPage() {
         type="text"
         placeholder="Buscar..."
         value={search}
-        onChange={handleSearchChange} // Llamar a la función al cambiar el input
+        onChange={handleSearchChange} 
         className="mb-4 p-2 border border-gray-300 rounded"
       />
       <DataTable columns={columns} data={data} />

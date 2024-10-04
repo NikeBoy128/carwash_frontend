@@ -39,7 +39,7 @@ export default function AdminDashboard({ children }: AdminDashboardProps) {
             <span className="font-medium">Dashboard</span>
           </Link>
           <Link
-            href="#"
+            href="/dashboard/user"
             className="flex items-center px-6 py-3 text-gray-700 dark:text-gray-200 transition-colors duration-200 hover:text-black"
           >
             <HiOutlineUsers className="w-5 h-5 mr-3" />

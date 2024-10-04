@@ -16,6 +16,7 @@ export const signInAction = async (values: z.infer<typeof loginSchema>) => {
     return { success: true };
   } catch (e) {
     if (e instanceof AuthError) {
+      console.log(e.cause?.err?.message);
       return { error: e.cause?.err?.message };
     }
   }

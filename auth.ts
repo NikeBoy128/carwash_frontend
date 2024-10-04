@@ -16,6 +16,7 @@ declare module "next-auth" {
           description: string;
         }
       ];
+      accessToken: string;
     } & DefaultSession["user"];
   }
 }
@@ -48,7 +49,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (axios.isAxiosError(e)) {
             throw new Error(e.response?.data.message);
           }
-
+          console.log(e);
           throw new Error("An error occurred");
         }
       },
@@ -68,4 +69,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
   },
+  trustHost: true,
 });

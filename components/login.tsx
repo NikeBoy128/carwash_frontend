@@ -2,8 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { loginSchema } from "@/lib/zod";
+import { z } from "zod"; // biblioteca de validación y esquema para TypeScript y JavaScript
+import { loginSchema } from "@/lib/zod"; //esquema de validación específico
 import {
   Card,
   CardHeader,
@@ -21,8 +21,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
+  const router = useRouter(); 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -30,10 +33,39 @@ export default function LoginForm() {
       password: "",
     },
   });
-
-  const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    console.log(values);
+  //consumo de api
+  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+    try {
+      const response = await fetch("http://localhost:3001/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+        }),
+      });
+      //alertas de errores 
+      if (!response.ok) {
+        const errorData = await response.json();
+        toast.error(errorData.message || "Error al iniciar sesión", {
+          className: "bg-red-500 text-white flex items-center p-4 rounded",
+        });
+        return;
+      }
+      //navegacion despues de la validacion
+      const data = await response.json();
+      localStorage.setItem("accessToken", data.accessToken);
+      router.push("/dashboard");
+    } catch (error) {
+      
+      toast.error("Error de red. Por favor, intenta de nuevo." + (error instanceof Error ? `: ${error.message}` : ""), {
+        className: "bg-red-500 text-white flex items-center p-4 rounded",
+      });
+    }
   };
+  
 
   return (
     <Card className="w-[350px]">
@@ -70,11 +102,7 @@ export default function LoginForm() {
                 </FormItem>
               )}
             />
-            <Button
-              className="w-full"
-              type="submit"
-              onClick={form.handleSubmit(onSubmit)}
-            >
+            <Button className="w-full" type="submit">
               Iniciar Sesión
             </Button>
           </form>

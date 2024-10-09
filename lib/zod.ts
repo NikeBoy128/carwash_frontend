@@ -10,6 +10,6 @@ export const editUserSchema = z.object({
   name: z.string().max(50),
   lastName: z.string().max(50),
   email: z.string().email(),
-  roles: z.array(z.number()),
+  roles: z.array(z.string()),
   password: z.string().min(6).max(50).nullable().optional(),
 });

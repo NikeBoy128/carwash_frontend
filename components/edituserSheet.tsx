@@ -47,7 +47,7 @@ const EditUserSheet = ({
       name: user.name,
       lastName: user.lastName,
       email: user.email,
-      roles: user.rolesUser.map((roleUser) => Number(roleUser.role.id)),
+      roles: user.rolesUser.map((roleUser) => roleUser.role.id),
       password: "",
     },
   });

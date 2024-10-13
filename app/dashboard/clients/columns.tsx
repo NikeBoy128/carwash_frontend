@@ -41,7 +41,8 @@ const ActionCell: React.FC<{ user: User; refreshData: () => void }> = ({
         user={user}
         isOpen={isEditSheetOpen}
         onOpenChange={setIsEditSheetOpen}
-        onUserUpdated={refreshData} rolesList={[]}      />
+        onUserUpdated={refreshData}
+      />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -76,17 +77,7 @@ const columns = (refreshData: () => void): ColumnDef<User>[] => [
     accessorKey: "email",
     header: "Email",
   },
-  {
-    accessorKey: "rolesUser",
-    header: "Roles",
-    cell: ({ row }) => (
-      <div>
-        {row.original.rolesUser
-          .map((roleUser) => roleUser.role.name)
-          .join(", ")}
-      </div>
-    ),
-  },
+  
   {
     id: "actions",
     cell: ({ row }) => (

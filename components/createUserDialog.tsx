@@ -3,6 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+
 import {
   Dialog,
   DialogContent,
@@ -22,16 +23,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { editUserSchema } from "@/lib/zod";
+import { createUserSchema, editUserSchema } from "@/lib/zod";
 
-import {
-  MultiSelector,
-  MultiSelectorContent,
-  MultiSelectorInput,
-  MultiSelectorItem,
-  MultiSelectorList,
-  MultiSelectorTrigger,
-} from "@/components/ui/multiSelect";
+import { toast } from "sonner";
+import { MultiSelector, MultiSelectorContent, MultiSelectorInput, MultiSelectorItem, MultiSelectorList, MultiSelectorTrigger } from "./ui/multiSelect";
+import { createUser } from "@/app/api/users/user.api";
 
 interface DialogUserProps {
   isOpen: boolean;
@@ -51,8 +47,8 @@ const DialogUser: React.FC<DialogUserProps> = ({
       name: "",
       lastName: "",
       email: "",
-      roles: ["Admin", "User"],
       password: "",
+      roles:"",
     },
   });
 
@@ -63,16 +59,39 @@ const DialogUser: React.FC<DialogUserProps> = ({
         name: "",
         lastName: "",
         email: "",
-        roles: [],
         password: "",
+        roles:"",
       });
     }
   }, [isOpen, form]);
 
-  const onSubmit = async (values: z.infer<typeof editUserSchema>) => {
-    console.log("values", values);
-    onUserCreated();
-    onOpenChange(false);
+  const onSubmit = async (values: z.infer<typeof createUserSchema>) => {
+    try {
+      const response = await createUser({
+        id: 0,
+        name: values.name,
+        lastName: values.lastName,
+        email: values.email,
+        password: values.password, 
+        });
+  
+      if (response.statusCode === 200) {
+        toast.success(response.message, {
+          className: "bg-green-500 text-white flex items-center p-4 rounded",
+        });
+        onUserCreated();
+        onOpenChange(false);
+      } else {
+        toast.error(response.message, {
+          className: "bg-red-500 text-white flex items-center p-4 rounded",
+        });
+      }
+    } catch (error) {
+      console.error("Error al crear usuario:", error);
+      toast.error("Error al crear usuario", {
+        className: "bg-red-500 text-white flex items-center p-4 rounded",
+      });
+    }
   };
 
   return (
@@ -140,8 +159,7 @@ const DialogUser: React.FC<DialogUserProps> = ({
                 </FormItem>
               )}
             />
-
-            <FormField
+              <FormField
               control={form.control}
               name="roles"
               render={({ field }) => (
@@ -149,26 +167,21 @@ const DialogUser: React.FC<DialogUserProps> = ({
                   <FormLabel className="text-sm font-medium">Roles</FormLabel>
                   <MultiSelector
                     onValuesChange={field.onChange}
-                    values={field.value}
-                  >
+                    value={field.value} values={[]}                  >
                     <MultiSelectorTrigger>
                       <MultiSelectorInput placeholder="" />
                     </MultiSelectorTrigger>
                     <MultiSelectorContent>
                       <MultiSelectorList>
                         {[
-                          {
-                            name: "Admin",
-                          },
-                          {
-                            name: "User",
-                          },
-                        ].map((prefference) => (
+                          { name: "Admin" },
+                          { name: "User" },
+                        ].map((preference) => (
                           <MultiSelectorItem
-                            key={prefference.name}
-                            value={String(prefference.name)}
+                            key={preference.name}
+                            value={String(preference.name)}
                           >
-                            <span>{prefference.name}</span>
+                            <span>{preference.name}</span>
                           </MultiSelectorItem>
                         ))}
                       </MultiSelectorList>

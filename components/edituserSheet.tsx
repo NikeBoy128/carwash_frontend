@@ -1,7 +1,6 @@
-"use client";
 import { editUserSchema } from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -23,12 +22,16 @@ import {
   Form,
 } from "./ui/form";
 import { Input } from "./ui/input";
-import { User } from "@/interfaces/user";
+import { User, Role } from "@/interfaces/user";
 import { editUserAction } from "@/actions/user.actions";
 import { toast } from "sonner";
+import * as Select from "@radix-ui/react-select";
+
+
 
 interface EditUserSheetProps {
   user: User;
+  rolesList: Role[]; 
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   onUserUpdated: () => void;
@@ -36,6 +39,7 @@ interface EditUserSheetProps {
 
 const EditUserSheet = ({
   user,
+  rolesList,
   isOpen,
   onOpenChange,
   onUserUpdated,
@@ -47,24 +51,44 @@ const EditUserSheet = ({
       name: user.name,
       lastName: user.lastName,
       email: user.email,
-      roles: user.rolesUser.map((roleUser) => roleUser.role.id),
+      roles: user.rolesUser.map((roleUser) => Number(roleUser.role.id)),
       password: "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof editUserSchema>) => {
-    const response = await editUserAction(values);
-    if (response.statusCode == 200) {
-      toast.success(response.message, {
-        className: "bg-green-500 text-white flex items-center p-4 rounded",
+  useEffect(() => {
+    if (isOpen) {
+      form.reset({
+        id: Number(user.id),
+        name: user.name,
+        lastName: user.lastName,
+        email: user.email,
+        roles: user.rolesUser.map((roleUser) => Number(roleUser.role.id)),
+        password: "",
       });
-    } else {
-      toast.error(response.message, {
+    }
+  }, [isOpen, user, form]);
+
+  const onSubmit = async (values: z.infer<typeof editUserSchema>) => {
+    try {
+      const response = await editUserAction(values);
+      if (response.statusCode === 200) {
+        toast.success(response.message, {
+          className: "bg-green-500 text-white flex items-center p-4 rounded",
+        });
+        onUserUpdated();
+        onOpenChange(false);
+      } else {
+        toast.error(response.message, {
+          className: "bg-red-500 text-white flex items-center p-4 rounded",
+        });
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+      toast.error("Error al actualizar el usuario", {
         className: "bg-red-500 text-white flex items-center p-4 rounded",
       });
     }
-    onUserUpdated();
-    onOpenChange(false);
   };
 
   return (
@@ -141,6 +165,50 @@ const EditUserSheet = ({
                 </FormItem>
               )}
             />
+
+            
+<FormField
+  control={form.control}
+  name="roles"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>Roles</FormLabel>
+      <FormControl>
+        <Select.Root
+          value={field.value.length > 0 ? field.value[0].toString() : ""} // Asegúrate de pasar un string
+          onValueChange={(value: string) => {
+            const selectedValue = Number(value);
+            if (!field.value.includes(selectedValue)) {
+              field.onChange([...field.value, selectedValue]); // Agrega el nuevo rol
+            }
+          }}
+        >
+          <Select.Trigger className="w-full">
+            <Select.Value placeholder="Selecciona un rol" />
+            <Select.Icon />
+          </Select.Trigger>
+          <Select.Content>
+            <Select.Viewport>
+              {rolesList && rolesList.length > 0 ? (
+                rolesList.map((role) => (
+                  <Select.Item key={role.id} value={role.id.toString()}>
+                    <Select.ItemText>{role.name}</Select.ItemText>
+                  </Select.Item>
+                ))
+              ) : (
+                <p>No roles available</p>
+              )}
+            </Select.Viewport>
+          </Select.Content>
+        </Select.Root>
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
+
+
+
 
             <SheetFooter>
               <SheetClose asChild>

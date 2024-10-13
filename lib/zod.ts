@@ -22,3 +22,16 @@ export const addUserSchema = z.object({
   roles: z.array(z.enum(["Admin", "User"])), 
   password: z.string().min(6).max(50).nullable().optional(),
 });
+
+export const editCustomerSchema = z.object({
+  name: z.string().min(1, "Nombre es requerido"),
+  lastName: z.string().min(1, "Apellido es requerido"),
+  phone: z.string().min(10, "Teléfono debe tener al menos 10 dígitos"), 
+});
+
+
+export const addCustomerSchema = z.object({
+  name: z.string().min(1, "Nombre es requerido"),
+  lastName: z.string().min(1, "Apellido es requerido"),
+  phone: z.string().min(10, "Teléfono debe tener al menos 10 dígitos"), 
+});

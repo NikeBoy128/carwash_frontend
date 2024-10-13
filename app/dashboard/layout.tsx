@@ -32,7 +32,7 @@ export default function AdminDashboard({ children }: AdminDashboardProps) {
         </div>
         <nav className="mt-6">
           <Link
-            href="#"
+            href="/dashboard"
             className="flex items-center px-6 py-3 text-gray-700 dark:text-gray-200 transition-colors duration-200 hover:text-black"
           >
             <RiDashboard3Line className="w-5 h-5 mr-3" />
@@ -44,6 +44,13 @@ export default function AdminDashboard({ children }: AdminDashboardProps) {
           >
             <HiOutlineUsers className="w-5 h-5 mr-3" />
             <span className="font-medium">Users</span>
+          </Link>
+          <Link
+            href="/dashboard/clientes"
+            className="flex items-center px-6 py-3 text-gray-700 dark:text-gray-200 transition-colors duration-200 hover:text-black"
+          >
+            <HiOutlineUsers className="w-5 h-5 mr-3" />
+            <span className="font-medium">Clientes</span>
           </Link>
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="reports" className="border-none">

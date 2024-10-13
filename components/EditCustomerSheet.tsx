@@ -1,5 +1,5 @@
 "use client";
-import { editUserSchema } from "@/lib/zod";
+import { editCustomerSchema } from "@/lib/zod"; // Importa el esquema de validación para clientes
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -12,7 +12,7 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "./ui/sheet";
+} from "./ui/sheet"; 
 import { Button } from "./ui/button";
 import {
   FormField,
@@ -23,37 +23,35 @@ import {
   Form,
 } from "./ui/form";
 import { Input } from "./ui/input";
-import { User } from "@/interfaces/user";
-import { editUserAction } from "@/actions/user.actions";
 import { toast } from "sonner";
+import { Customer } from "@/interfaces/clients";
+import { editCustomer } from "@/app/api/customers/customer.api"; 
 
-interface EditUserSheetProps {
-  user: User;
+interface EditCustomerSheetProps {
+  customer: Customer; 
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  onUserUpdated: () => void;
+  onCustomerUpdated: () => void;
 }
 
-const EditUserSheet = ({
-  user,
+const EditCustomerSheet = ({
+  customer,
   isOpen,
   onOpenChange,
-  onUserUpdated,
-}: EditUserSheetProps) => {
-  const form = useForm<z.infer<typeof editUserSchema>>({
-    resolver: zodResolver(editUserSchema),
+  onCustomerUpdated,
+}: EditCustomerSheetProps) => {
+  const form = useForm<z.infer<typeof editCustomerSchema>>({
+    resolver: zodResolver(editCustomerSchema),
     defaultValues: {
-      id: Number(user.id),
-      name: user.name,
-      lastName: user.lastName,
-      email: user.email,
-      password: "",
+      name: customer.name,
+      lastName: customer.lastName,
+      phone: customer.phone,
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof editUserSchema>) => {
-    const response = await editUserAction(values);
-    if (response.statusCode == 200) {
+  const onSubmit = async (values: z.infer<typeof editCustomerSchema>) => {
+    const response = await editCustomer(values); 
+    if (response.statusCode === 200) {
       toast.success(response.message, {
         className: "bg-green-500 text-white flex items-center p-4 rounded",
       });
@@ -62,25 +60,23 @@ const EditUserSheet = ({
         className: "bg-red-500 text-white flex items-center p-4 rounded",
       });
     }
-    onUserUpdated();
+    onCustomerUpdated();
     onOpenChange(false);
   };
+  
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent className="bg-white">
         <SheetHeader>
-          <SheetTitle>Editar Usuario</SheetTitle>
+          <SheetTitle>Editar Cliente</SheetTitle>
           <SheetDescription>
-            Realiza cambios en la información del usuario aquí. Haz clic en
+            Realiza cambios en la información del cliente aquí. Haz clic en
             guardar cuando hayas terminado.
           </SheetDescription>
         </SheetHeader>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 py-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
             <FormField
               control={form.control}
               name="name"
@@ -111,30 +107,12 @@ const EditUserSheet = ({
 
             <FormField
               control={form.control}
-              name="email"
+              name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>celular</FormLabel>
                   <FormControl>
-                    <Input type="email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contraseña</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      {...field}
-                      value={field.value ?? ""}
-                    />
+                    <Input type="phone" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -160,4 +138,4 @@ const EditUserSheet = ({
   );
 };
 
-export default EditUserSheet;
+export default EditCustomerSheet;

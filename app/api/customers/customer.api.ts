@@ -51,7 +51,7 @@ export const createCustomer = async (
       console.error("Error en la solicitud:", e.response?.data);
       return e.response?.data;
     }
-
+    console.error("Error inesperado:", e);
     return { message: "Error creando cliente" };
   }
 };
@@ -80,6 +80,7 @@ export const editCustomer = async (
   const session = await getSession();
 
   const customerData = {
+    id: values.id,
     name: values.name,
     lastName: values.lastName,
     phone: values.phone,

@@ -24,8 +24,16 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { User } from "@/interfaces/user";
-import { editUserAction } from "@/actions/user.actions";
 import { toast } from "sonner";
+import { editUser } from "@/app/api/users/user.api";
+import {
+  MultiSelector,
+  MultiSelectorContent,
+  MultiSelectorInput,
+  MultiSelectorItem,
+  MultiSelectorList,
+  MultiSelectorTrigger,
+} from "./ui/multiSelect";
 
 interface EditUserSheetProps {
   user: User;
@@ -47,14 +55,14 @@ const EditUserSheet = ({
       name: user.name,
       lastName: user.lastName,
       email: user.email,
-      password: "",
+      password: undefined,
+      roles: user.rolesUser.map((role) => role.role.name),
     },
   });
 
   const onSubmit = async (values: z.infer<typeof editUserSchema>) => {
-    console.log("Form submitted", values); // Verificar si el onSubmit se llama
-    const response = await editUserAction(values);
-    if (response.statusCode === 200) {
+    const response = await editUser(values);
+    if (response.statusCode == 200) {
       toast.success(response.message, {
         className: "bg-green-500 text-white flex items-center p-4 rounded",
       });
@@ -119,6 +127,51 @@ const EditUserSheet = ({
                   <FormControl>
                     <Input type="email" {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Contraseña</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      {...field}
+                      value={field.value ?? ""}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="roles"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium">Roles</FormLabel>
+                  <MultiSelector
+                    onValuesChange={field.onChange}
+                    values={field.value}
+                  >
+                    <MultiSelectorTrigger>
+                      <MultiSelectorInput placeholder="Selecciona roles" />
+                    </MultiSelectorTrigger>
+                    <MultiSelectorContent>
+                      <MultiSelectorList>
+                        {["Administrador", "Empleado"].map((role) => (
+                          <MultiSelectorItem key={role} value={role}>
+                            <span>{role}</span>
+                          </MultiSelectorItem>
+                        ))}
+                      </MultiSelectorList>
+                    </MultiSelectorContent>
+                  </MultiSelector>
                   <FormMessage />
                 </FormItem>
               )}

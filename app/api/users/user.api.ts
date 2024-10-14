@@ -1,11 +1,9 @@
-
-import { DataUsers } from "@/interfaces/user"; 
-import { axiosInstance } from "@/lib/axios"; 
-import { addUserSchema, editUserSchema } from "@/lib/zod"; 
+import { DataUsers } from "@/interfaces/user";
+import { axiosInstance } from "@/lib/axios";
+import { addUserSchema, editUserSchema } from "@/lib/zod";
 import axios from "axios";
-import { getSession } from "next-auth/react"; 
+import { getSession } from "next-auth/react";
 import { z } from "zod";
-
 
 export const getDataUsers = async (page: number) => {
   const session = await getSession(); // Obtiene la sesión actual
@@ -15,50 +13,51 @@ export const getDataUsers = async (page: number) => {
       perPage: 5,
     },
     headers: {
-      Authorization: `Bearer ${session?.user?.accessToken}`, 
+      Authorization: `Bearer ${session?.user?.accessToken}`,
     },
   });
 
-  return response.data; 
+  return response.data;
 };
 
 export const createUser = async (values: z.infer<typeof addUserSchema>) => {
-  const session = await getSession(); 
+  const session = await getSession();
 
   const userData = {
     name: values.name,
     lastName: values.lastName,
     email: values.email,
     password: values.password,
-    roles: values.roles.map(role => {
-      switch (role) {
-        case 'Admin':
-          return 1; // ID para Admin
-        case 'User':
-          return 2; // ID para User
-        default:
-          return null; // O maneja el caso
-      }
-    }).filter(role => role !== null), // Filtrar roles inválidos
+    roles: values.roles
+      .map((role) => {
+        switch (role) {
+          case "Administrador":
+            return 1; // ID para Admin
+          case "Empleado":
+            return 2; // ID para User
+          default:
+            return null; // O maneja el caso
+        }
+      })
+      .filter((role) => role !== null), // Filtrar roles inválidos
   };
 
   try {
     const response = await axiosInstance.post("/user/create", userData, {
       headers: {
-        Authorization: `Bearer ${session?.user?.accessToken}`, 
+        Authorization: `Bearer ${session?.user?.accessToken}`,
       },
     });
-    return response.data; 
+    return response.data;
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      console.error("Error en la solicitud:", e.response?.data); 
-      return e.response?.data; 
+      console.error("Error en la solicitud:", e.response?.data);
+      return e.response?.data;
     }
-    console.error("Error inesperado:", e); 
-    return { message: "Error creando usuario" }; 
+    console.error("Error inesperado:", e);
+    return { message: "Error creando usuario" };
   }
 };
-
 
 // Eliminar un usuario
 export const deleteUser = async (id: number) => {
@@ -81,9 +80,22 @@ export const deleteUser = async (id: number) => {
 
 // Editar un usuario existente
 export const editUser = async (values: z.infer<typeof editUserSchema>) => {
+  const roles = values.roles
+    .map((role) => {
+      switch (role) {
+        case "Administrador":
+          return 1; // ID para Admin
+        case "Empleado":
+          return 2; // ID para User
+        default:
+          return null; // O maneja el caso
+      }
+    })
+    .filter((role) => role !== null);
+  const userEditData = { ...values, roles };
   const session = await getSession(); // Obtiene la sesión actual
   try {
-    const response = await axiosInstance.patch("/user/update", values, {
+    const response = await axiosInstance.patch("/user/update", userEditData, {
       headers: {
         Authorization: `Bearer ${session?.user?.accessToken}`, // Agrega el token de acceso
       },

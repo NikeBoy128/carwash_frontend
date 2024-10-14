@@ -43,7 +43,7 @@ const EditCustomerSheet = ({
   const form = useForm<z.infer<typeof editCustomerSchema>>({
     resolver: zodResolver(editCustomerSchema),
     defaultValues: {
-      id: customer.id,
+      id: Number(customer.id),
       name: customer.name,
       lastName: customer.lastName,
       phone: customer.phone,
@@ -51,7 +51,6 @@ const EditCustomerSheet = ({
   });
 
   const onSubmit = async (values: z.infer<typeof editCustomerSchema>) => {
-    console.log(values);
     const response = await editCustomer(values);
     if (response.statusCode === 200) {
       toast.success(response.message, {

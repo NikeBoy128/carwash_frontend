@@ -24,7 +24,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import { createCustomer } from "@/app/api/customers/customer.api";
-import { toast } from "sonner";
 
 interface DialogUserProps {
   isOpen: boolean;
@@ -71,16 +70,14 @@ const DialogUser: React.FC<DialogUserProps> = ({
       });
 
       if (response.statusCode === 201) {
-        toast.success(response.message, {
-          className: "bg-green-500 text-white",
-        });
+        console.log("Cliente creado:", response);
         onUserCreated();
       } else {
-        toast.error(response.message, {
-          className: "bg-red-500 text-white",
-        });
+        console.error(response.message);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error en la creación del cliente:", error);
+    }
 
     onOpenChange(false);
   };

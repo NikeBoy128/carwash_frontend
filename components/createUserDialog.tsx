@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { editUserSchema } from "@/lib/zod";
+import { addUserSchema } from "@/lib/zod";
 
 import {
   MultiSelector,
@@ -47,7 +47,7 @@ const DialogUser: React.FC<DialogUserProps> = ({
   onUserCreated,
 }) => {
   const form = useForm({
-    resolver: zodResolver(editUserSchema),
+    resolver: zodResolver(addUserSchema),
     defaultValues: {
       id: undefined,
       name: "",
@@ -71,17 +71,16 @@ const DialogUser: React.FC<DialogUserProps> = ({
     }
   }, [isOpen, form]);
 
-  const onSubmit = async (values: z.infer<typeof editUserSchema>) => {
+  const onSubmit = async (values: z.infer<typeof addUserSchema>) => {
     const response = await createUser(values);
     if (response.statusCode === 201) {
       toast.success(response.message, {
-        className: "bg-green-500 text-white",
+        className: "bg-green-500 text-white flex items-center p-4 rounded",
       });
-
       onUserCreated();
     } else {
       toast.error(response.message, {
-        className: "bg-red-500 text-white",
+        className: "bg-red-500 text-white flex items-center p-4 rounded",
       });
     }
     onOpenChange(false);
@@ -170,7 +169,7 @@ const DialogUser: React.FC<DialogUserProps> = ({
                     </MultiSelectorTrigger>
                     <MultiSelectorContent>
                       <MultiSelectorList>
-                        {["Admin", "User"].map((role) => (
+                        {["Administrador", "Empleado"].map((role) => (
                           <MultiSelectorItem key={role} value={role}>
                             <span>{role}</span>
                           </MultiSelectorItem>

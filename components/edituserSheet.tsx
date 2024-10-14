@@ -52,8 +52,9 @@ const EditUserSheet = ({
   });
 
   const onSubmit = async (values: z.infer<typeof editUserSchema>) => {
+    console.log("Form submitted", values); // Verificar si el onSubmit se llama
     const response = await editUserAction(values);
-    if (response.statusCode == 200) {
+    if (response.statusCode === 200) {
       toast.success(response.message, {
         className: "bg-green-500 text-white flex items-center p-4 rounded",
       });
@@ -117,24 +118,6 @@ const EditUserSheet = ({
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input type="email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contraseña</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      {...field}
-                      value={field.value ?? ""}
-                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

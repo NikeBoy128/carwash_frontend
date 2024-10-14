@@ -56,7 +56,7 @@ export const createCustomer = async (
   }
 };
 
-export const deleteCustomer = async (id: string) => {
+export const deleteCustomer = async (id: number) => {
   const session = await getSession();
   try {
     const response = await axiosInstance.delete(`/customer/${id}`, {

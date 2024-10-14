@@ -51,6 +51,7 @@ const EditCustomerSheet = ({
   });
 
   const onSubmit = async (values: z.infer<typeof editCustomerSchema>) => {
+    console.log(values);
     const response = await editCustomer(values);
     if (response.statusCode === 200) {
       toast.success(response.message, {

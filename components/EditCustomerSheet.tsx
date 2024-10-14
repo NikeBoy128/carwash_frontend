@@ -12,7 +12,7 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "./ui/sheet"; 
+} from "./ui/sheet";
 import { Button } from "./ui/button";
 import {
   FormField,
@@ -25,10 +25,10 @@ import {
 import { Input } from "./ui/input";
 import { toast } from "sonner";
 import { Customer } from "@/interfaces/clients";
-import { editCustomer } from "@/app/api/customers/customer.api"; 
+import { editCustomer } from "@/app/api/customers/customer.api";
 
 interface EditCustomerSheetProps {
-  customer: Customer; 
+  customer: Customer;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   onCustomerUpdated: () => void;
@@ -43,6 +43,7 @@ const EditCustomerSheet = ({
   const form = useForm<z.infer<typeof editCustomerSchema>>({
     resolver: zodResolver(editCustomerSchema),
     defaultValues: {
+      id: Number(customer.id),
       name: customer.name,
       lastName: customer.lastName,
       phone: customer.phone,
@@ -50,7 +51,7 @@ const EditCustomerSheet = ({
   });
 
   const onSubmit = async (values: z.infer<typeof editCustomerSchema>) => {
-    const response = await editCustomer(values); 
+    const response = await editCustomer(values);
     if (response.statusCode === 200) {
       toast.success(response.message, {
         className: "bg-green-500 text-white flex items-center p-4 rounded",
@@ -63,7 +64,6 @@ const EditCustomerSheet = ({
     onCustomerUpdated();
     onOpenChange(false);
   };
-  
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
@@ -76,7 +76,10 @@ const EditCustomerSheet = ({
           </SheetDescription>
         </SheetHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 py-4"
+          >
             <FormField
               control={form.control}
               name="name"

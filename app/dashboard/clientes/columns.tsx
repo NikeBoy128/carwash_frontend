@@ -22,7 +22,7 @@ const ActionCell: React.FC<{ customer: Customer; refreshData: () => void }> = ({
 }) => {
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
 
-  const handleDelete = async (id: string) => { 
+  const handleDelete = async (id: number) => {
     const response = await deleteCustomer(id);
 
     if (response.statusCode === 200) {
@@ -43,7 +43,7 @@ const ActionCell: React.FC<{ customer: Customer; refreshData: () => void }> = ({
         customer={customer}
         isOpen={isEditSheetOpen}
         onOpenChange={setIsEditSheetOpen}
-        onCustomerUpdated={refreshData} 
+        onCustomerUpdated={refreshData}
       />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>

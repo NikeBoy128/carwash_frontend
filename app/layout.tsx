@@ -26,6 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+<<<<<<< HEAD
     <>
       <SessionProvider>
         <html lang="en" className="h-full">
@@ -42,5 +43,14 @@ export default function RootLayout({
         </html>
       </SessionProvider>
     </>
+=======
+    <html lang="en" className="h-full">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex items-center justify-center h-full bg-gradient-animated`}
+      >
+        {children}
+      </body>
+    </html>
+>>>>>>> e7b67dfb72ffcbe671dc7f932c4db86eb7efe1dc
   );
 }

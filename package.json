@@ -20,20 +20,26 @@
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
+<<<<<<< HEAD
     "@radix-ui/react-tabs": "^1.1.1",
     "@radix-ui/react-toast": "^1.2.1",
     "@react-spring/web": "^9.7.4",
     "@tanstack/react-table": "^8.20.5",
     "@types/react-icons": "^2.2.7",
     "axios": "^1.7.7",
+=======
+>>>>>>> e7b67dfb72ffcbe671dc7f932c4db86eb7efe1dc
     "carwash_frontend": "file:",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "lucide-react": "^0.441.0",
     "next": "^14.2.12",
+<<<<<<< HEAD
     "next-auth": "^5.0.0-beta.21",
     "next-themes": "^0.3.0",
+=======
+>>>>>>> e7b67dfb72ffcbe671dc7f932c4db86eb7efe1dc
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.0",

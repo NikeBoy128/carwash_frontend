@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import LoginForm from "@/components/login";
 import Image from "next/image";
 export default function Home() {
@@ -15,5 +16,23 @@ export default function Home() {
         <LoginForm />
       </div>
     </div>
+=======
+//import DashboardPage from "@/app/dashboard/dashboard";
+
+import LoginForm from "./login/page";
+
+//import NewWashPage from "@/components/lavado";
+
+
+
+export default function Home() {
+  return (
+
+    <LoginForm/>
+    
+    //<DashboardPage/>
+    //<NewWashPage/>
+    
+>>>>>>> e7b67dfb72ffcbe671dc7f932c4db86eb7efe1dc
   );
 }

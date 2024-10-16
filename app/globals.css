@@ -84,3 +84,114 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.bg-gradient-animated {
+  background: linear-gradient(135deg, #00c6ff, #0072ff, #ffffff, #192ea5);
+  background-size: 400% 400%;
+  animation: gradientAnimation 10s ease infinite;
+}
+
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: -3rem; 
+}
+
+.logo {
+  width: 100px; 
+  height: auto; 
+}
+
+
+@media (min-width: 768px) {
+  .logo {
+    width: 150px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .logo {
+    width: 200px;
+  }
+}
+
+/* estilos dashboard */
+
+
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+}
+
+.sidebar {
+  width: 16rem; 
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+  padding: 1rem;
+}
+
+.sidebar-title {
+  font-size: 1.5rem; 
+}
+
+.sidebar-link {
+  display: block;
+  padding: 0.75rem 1rem; 
+  color: #4b5563;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar-link:hover {
+  background-color: #3b82f6; 
+  color: white;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 1.5rem; 
+}
+
+.main-title {
+  font-size: 1.875rem; 
+  font-weight: 600;
+  color: #1f2937; 
+  margin-bottom: 1.5rem; 
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem; 
+}
+
+@media (min-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr); 
+  }
+}
+
+.card-link {
+  display: block;
+}
+
+.card-hover-effect:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
+} 

@@ -1,0 +1,91 @@
+[33mcommit ea01b853882da49d51f22af21a59398b19a30d9d[m[33m ([m[1;36mHEAD -> [m[1;32mdev-harold-dashboard[m[33m)[m
+Author: NikeBoy128 <haroldmosquera739@gmail.com>
+Date:   Fri Oct 4 13:13:23 2024 -0500
+
+    Add crud users components
+
+[33mcommit 6d2a370408000fcfa1014f98209a19cf1bd65036[m
+Author: NikeBoy128 <haroldmosquera739@gmail.com>
+Date:   Wed Oct 2 23:03:32 2024 -0500
+
+    Refactor layout component and remove unnecessary code
+
+[33mcommit d412ac7753976b13cb032a641b9288b0f06c3356[m
+Author: NikeBoy128 <haroldmosquera739@gmail.com>
+Date:   Wed Oct 2 23:01:03 2024 -0500
+
+    Refactor WelcomeMessage component and LoginForm component
+
+[33mcommit fd31b650023a589a656c4838a880176820922cd5[m
+Author: jhojax12866 <jhojanfer12@gmail.com>
+Date:   Wed Oct 2 22:03:23 2024 -0500
+
+    table and animations
+
+[33mcommit 3f7e801a8518848458af5f78b7fbf3577fee4b87[m
+Author: jhojax12866 <jhojanfer12@gmail.com>
+Date:   Wed Oct 2 21:58:43 2024 -0500
+
+    implementation of data table, welcome message, login animation
+
+[33mcommit 14a66e924a80e5a2cbaa7ca37a69fc9f7f192d4b[m
+Author: NikeBoy128 <haroldmosquera739@gmail.com>
+Date:   Mon Sep 30 21:38:52 2024 -0500
+
+    Refactor login form to navigate to dashboard on successful login
+
+[33mcommit adfc0892572f1556313194cba83b67a720ee4c9e[m
+Author: NikeBoy128 <haroldmosquera739@gmail.com>
+Date:   Mon Sep 30 21:38:27 2024 -0500
+
+    Refactor login form inputs and layout components, and add navigation to dashboard
+
+[33mcommit 99c1b526a8fa68896b37b8e34b80f1560273f9a1[m
+Author: NikeBoy128 <haroldmosquera739@gmail.com>
+Date:   Sat Sep 28 12:30:46 2024 -0500
+
+    Refactor auth.ts and login.tsx files
+
+[33mcommit e753575b7f8a3f466b31a3ce6e8af3cd89a82494[m
+Author: NikeBoy128 <haroldmosquera739@gmail.com>
+Date:   Mon Sep 23 14:09:56 2024 -0500
+
+    feat: authjs session module
+
+[33mcommit 68ea2b6381d36cde2a45f7c841ebe8afbafa578b[m
+Author: NikeBoy128 <haroldmosquera739@gmail.com>
+Date:   Sat Sep 21 08:28:21 2024 -0500
+
+    Refactor dashboard layout and add new concept link
+
+[33mcommit c54e7840187809797dd1fd2c77e239202ecf8ac5[m
+Author: NikeBoy128 <haroldmosquera739@gmail.com>
+Date:   Fri Sep 20 11:26:50 2024 -0500
+
+    Refactor layout and add meta viewport tag
+
+[33mcommit 3d6cd0d8305ce1a9781b8bd519b9fcd45df8b4a5[m
+Author: NikeBoy128 <haroldmosquera739@gmail.com>
+Date:   Fri Sep 20 11:18:54 2024 -0500
+
+    Refactor login form inputs and layout components
+
+[33mcommit 0079d88ce913742ec4394fc903dec368fc35b49b[m
+Author: NikeBoy128 <haroldmosquera739@gmail.com>
+Date:   Fri Sep 20 08:36:58 2024 -0500
+
+    Refactor login form inputs
+
+[33mcommit 418f64d418d77ac869cf83ba757ead800137c243[m
+Author: NikeBoy128 <haroldmosquera739@gmail.com>
+Date:   Thu Sep 19 14:07:39 2024 -0500
+
+    feat: Add login schema validation
+    
+    - Added login schema validation using the zod library to validate email and password fields.
+
+[33mcommit a90d5d29edc4c8b98ef56395874d24106f98cd6b[m
+Author: NikeBoy128 <haroldmosquera739@gmail.com>
+Date:   Thu Sep 19 10:43:10 2024 -0500
+
+    Initial commit from Create Next App

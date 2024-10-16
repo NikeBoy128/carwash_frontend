@@ -27,7 +27,7 @@ export default function AdminDashboard({ children }: AdminDashboardProps) {
       <aside className="w-64 h-screen shadow-lg">
         <div className="p-6">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-            Admin Panel
+            CARWASH SOFTWARE
           </h1>
         </div>
         <nav className="mt-6">
@@ -93,7 +93,7 @@ export default function AdminDashboard({ children }: AdminDashboardProps) {
             <span className="font-medium">Invoices</span>
           </Link>
           <Link
-            href="#"
+            href="/dashboard/concepts"
             className="flex items-center px-6 py-3 mt-2 text-gray-600 dark:text-gray-400 transition-colors duration-200 hover:text-black"
           >
             <HiOutlineSquaresPlus className="w-5 h-5 mr-3" />

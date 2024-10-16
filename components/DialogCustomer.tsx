@@ -23,9 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-
 import { createCustomer } from "@/app/api/customers/customer.api";
-
 
 interface DialogUserProps {
   isOpen: boolean;
@@ -33,9 +31,7 @@ interface DialogUserProps {
   onUserCreated: () => void;
 }
 
-
 const customerSchema = z.object({
-
   name: z.string().nonempty("El nombre es obligatorio"),
   lastName: z.string().nonempty("El apellido es obligatorio"),
   phone: z.string().nonempty("El teléfono es obligatorio"),
@@ -47,11 +43,11 @@ const DialogUser: React.FC<DialogUserProps> = ({
   onUserCreated,
 }) => {
   const form = useForm({
-    resolver: zodResolver(customerSchema), 
+    resolver: zodResolver(customerSchema),
     defaultValues: {
       name: "",
       lastName: "",
-      phone: "", 
+      phone: "",
     },
   });
 
@@ -60,31 +56,29 @@ const DialogUser: React.FC<DialogUserProps> = ({
       form.reset({
         name: "",
         lastName: "",
-        phone: "", 
+        phone: "",
       });
     }
   }, [isOpen, form]);
- 
+
   const onSubmit = async (values: z.infer<typeof customerSchema>) => {
     try {
-    
       const response = await createCustomer({
         name: values.name,
         lastName: values.lastName,
         phone: values.phone,
       });
-  
-      if (response.statusCode === 200) {
+
+      if (response.statusCode === 201) {
         console.log("Cliente creado:", response);
-        onUserCreated(); 
+        onUserCreated();
       } else {
-        console.error( response.message);
+        console.error(response.message);
       }
     } catch (error) {
       console.error("Error en la creación del cliente:", error);
     }
-  
-    
+
     onOpenChange(false);
   };
 
@@ -96,7 +90,10 @@ const DialogUser: React.FC<DialogUserProps> = ({
           <DialogDescription>Crea clientes aquí</DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 py-4"
+          >
             <FormField
               control={form.control}
               name="name"

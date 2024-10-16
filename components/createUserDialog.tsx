@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { editUserSchema } from "@/lib/zod";
+import { addUserSchema } from "@/lib/zod";
 
 import {
   MultiSelector,
@@ -33,6 +33,7 @@ import {
   MultiSelectorTrigger,
 } from "@/components/ui/multiSelect";
 import { createUser } from "@/app/api/users/user.api";
+import { toast } from "sonner";
 
 interface DialogUserProps {
   isOpen: boolean;
@@ -46,7 +47,7 @@ const DialogUser: React.FC<DialogUserProps> = ({
   onUserCreated,
 }) => {
   const form = useForm({
-    resolver: zodResolver(editUserSchema),
+    resolver: zodResolver(addUserSchema),
     defaultValues: {
       id: undefined,
       name: "",
@@ -70,15 +71,19 @@ const DialogUser: React.FC<DialogUserProps> = ({
     }
   }, [isOpen, form]);
 
-  const onSubmit = async (values: z.infer<typeof editUserSchema>) => {
-    const response = await createUser(values); 
-    if (response) {
-      console.log("Usuario creado:", response); 
-      onUserCreated(); 
+  const onSubmit = async (values: z.infer<typeof addUserSchema>) => {
+    const response = await createUser(values);
+    if (response.statusCode === 201) {
+      toast.success(response.message, {
+        className: "bg-green-500 text-white flex items-center p-4 rounded",
+      });
+      onUserCreated();
     } else {
-      console.log("Error creando usuario:", values)
+      toast.error(response.message, {
+        className: "bg-red-500 text-white flex items-center p-4 rounded",
+      });
     }
-    onOpenChange(false); 
+    onOpenChange(false);
   };
 
   return (
@@ -89,8 +94,14 @@ const DialogUser: React.FC<DialogUserProps> = ({
           <DialogDescription>Crea Usuarios aquí</DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
-            <FormField control={form.control} name="name" render={({ field }) => (
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 py-4"
+          >
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nombre</FormLabel>
                   <FormControl>
@@ -101,7 +112,10 @@ const DialogUser: React.FC<DialogUserProps> = ({
               )}
             />
 
-            <FormField control={form.control} name="lastName" render={({ field }) => (
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Apellido</FormLabel>
                   <FormControl>
@@ -112,7 +126,10 @@ const DialogUser: React.FC<DialogUserProps> = ({
               )}
             />
 
-            <FormField control={form.control} name="email" render={({ field }) => (
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
@@ -123,7 +140,10 @@ const DialogUser: React.FC<DialogUserProps> = ({
               )}
             />
 
-            <FormField control={form.control} name="password" render={({ field }) => (
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Contraseña</FormLabel>
                   <FormControl>
@@ -134,16 +154,22 @@ const DialogUser: React.FC<DialogUserProps> = ({
               )}
             />
 
-            <FormField control={form.control} name="roles" render={({ field }) => (
+            <FormField
+              control={form.control}
+              name="roles"
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-medium">Roles</FormLabel>
-                  <MultiSelector onValuesChange={field.onChange} values={field.value}>
+                  <MultiSelector
+                    onValuesChange={field.onChange}
+                    values={field.value}
+                  >
                     <MultiSelectorTrigger>
                       <MultiSelectorInput placeholder="Selecciona roles" />
                     </MultiSelectorTrigger>
                     <MultiSelectorContent>
                       <MultiSelectorList>
-                        {["Admin", "User"].map((role) => (
+                        {["Administrador", "Empleado"].map((role) => (
                           <MultiSelectorItem key={role} value={role}>
                             <span>{role}</span>
                           </MultiSelectorItem>
@@ -158,7 +184,11 @@ const DialogUser: React.FC<DialogUserProps> = ({
 
             <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => onOpenChange(false)}
+                >
                   Cancelar
                 </Button>
               </DialogClose>

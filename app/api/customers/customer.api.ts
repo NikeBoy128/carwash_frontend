@@ -5,7 +5,7 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 import { z } from "zod";
 
-export const getDataCustomers = async (page: number) => {
+export const getDataCustomers = async (page: number, search?: string) => {
   const session = await getSession(); // Obtiene la sesión actual
   const response = await axiosInstance.get<DataCustomers>(
     "/customer/whit-pagination",
@@ -13,6 +13,7 @@ export const getDataCustomers = async (page: number) => {
       params: {
         page: page,
         perPage: 5,
+        search: search,
       },
       headers: {
         Authorization: `Bearer ${session?.user?.accessToken}`,

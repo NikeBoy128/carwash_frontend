@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
-import { getDataCustomers } from "@/app/api/customers/customer.api"; 
-import { Metadata, Customer } from "@/interfaces/clients"; 
-import columns from "./columns"; 
+import { getDataCustomers } from "@/app/api/customers/customer.api";
+import { Metadata, Customer } from "@/interfaces/clients";
+import columns from "./columns";
 import { Button } from "@/components/ui/button";
 import Paginator from "@/components/paginator";
 import DialogUser from "@/components/DialogCustomer";
@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Search, RefreshCw, UserPlus } from "lucide-react";
+import { debounce } from "lodash";
 
 const ClientPage = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -20,13 +21,23 @@ const ClientPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchData = useCallback(async () => {
-    setIsLoading(true);
-    const response = await getDataCustomers(page);
-    setCustomers(response.rows);
-    setPaginationInfo(response.metadata);
-    setIsLoading(false);
-  }, [page]);
+  const fetchData = useCallback(
+    async (searchTerm: string = "") => {
+      setIsLoading(true);
+      const response = await getDataCustomers(page, searchTerm);
+      setCustomers(response.rows);
+      setPaginationInfo(response.metadata);
+      setIsLoading(false);
+    },
+    [page]
+  );
+
+  const debouncedFetchData = useCallback(
+    debounce((searchTerm: string) => {
+      fetchData(searchTerm);
+    }, 500),
+    [fetchData]
+  );
 
   useEffect(() => {
     fetchData();
@@ -41,18 +52,16 @@ const ClientPage = () => {
   };
 
   const handleCustomerCreated = () => {
-    fetchData(); 
-    setIsDialogOpen(false); 
+    fetchData();
+    setIsDialogOpen(false);
   };
 
-  
-  const filteredCustomers = customers.filter(
-    (customer) =>
-      (customer.name?.toLowerCase().includes(searchTerm.toLowerCase()) || "") ||
-      (customer.email?.toLowerCase().includes(searchTerm.toLowerCase()) || "")
-  );
+  const columnsConfig = columns(() => fetchData(searchTerm));
 
-  const columnsConfig = columns(fetchData);
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    debouncedFetchData(e.target.value);
+  };
 
   return (
     <motion.div
@@ -63,7 +72,9 @@ const ClientPage = () => {
     >
       <Card>
         <CardHeader className="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
-          <CardTitle className="text-2xl font-bold">Gestión de Clientes</CardTitle>
+          <CardTitle className="text-2xl font-bold">
+            Gestión de Clientes
+          </CardTitle>
           <Button onClick={() => setIsDialogOpen(true)}>
             <UserPlus className="mr-2 h-4 w-4" /> Añadir Cliente
           </Button>
@@ -75,17 +86,13 @@ const ClientPage = () => {
               <Input
                 placeholder="Buscar clientes..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleSearch}
                 className="pl-8"
               />
             </div>
-            <Button variant="outline" onClick={fetchData} disabled={isLoading}>
-              <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-              Actualizar
-            </Button>
           </div>
           <div className="rounded-md border">
-            <DataTableClients columns={columnsConfig} data={filteredCustomers} />
+            <DataTableClients columns={columnsConfig} data={customers} />
           </div>
           {paginationInfo && (
             <div className="mt-4">
@@ -99,9 +106,9 @@ const ClientPage = () => {
         </CardContent>
       </Card>
       <DialogUser
-        isOpen={isDialogOpen} 
-        onOpenChange={setIsDialogOpen} 
-        onUserCreated={handleCustomerCreated} 
+        isOpen={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        onUserCreated={handleCustomerCreated}
       />
     </motion.div>
   );

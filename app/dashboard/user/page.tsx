@@ -12,6 +12,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Search, UserPlus, RefreshCw } from "lucide-react";
+import { debounce } from "lodash";
 
 const UserPage = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -21,16 +22,26 @@ const UserPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchData = useCallback(async () => {
-    setIsLoading(true);
-    const response = await getDataUsers(page);
-    setUsers(response.rows);
-    setPaginationInfo(response.metadata);
-    setIsLoading(false);
-  }, [page]);
+  const fetchData = useCallback(
+    async (searchTerm: string) => {
+      setIsLoading(true);
+      const response = await getDataUsers(page, searchTerm);
+      setUsers(response.rows);
+      setPaginationInfo(response.metadata);
+      setIsLoading(false);
+    },
+    [page]
+  );
+
+  const debouncedFetchData = useCallback(
+    debounce((searchTerm: string) => {
+      fetchData(searchTerm);
+    }, 500),
+    [fetchData]
+  );
 
   useEffect(() => {
-    fetchData();
+    fetchData("");
   }, [fetchData]);
 
   const handleNextPage = () => {
@@ -42,16 +53,15 @@ const UserPage = () => {
   };
 
   const handleUserCreated = () => {
-    fetchData();
+    fetchData(searchTerm);
   };
 
-  const filteredUsers = users.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const columnsConfig = columns(() => fetchData(searchTerm));
 
-  const columnsConfig = columns(fetchData);
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    debouncedFetchData(e.target.value);
+  };
 
   return (
     <motion.div
@@ -62,7 +72,9 @@ const UserPage = () => {
     >
       <Card>
         <CardHeader className="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
-          <CardTitle className="text-2xl font-bold">Gestión de Usuarios</CardTitle>
+          <CardTitle className="text-2xl font-bold">
+            Gestión de Usuarios
+          </CardTitle>
           <Button onClick={() => setIsDialogOpen(true)}>
             <UserPlus className="mr-2 h-4 w-4" /> Crear Usuario
           </Button>
@@ -74,17 +86,13 @@ const UserPage = () => {
               <Input
                 placeholder="Buscar usuarios..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleSearch}
                 className="pl-8"
               />
             </div>
-            <Button variant="outline" onClick={fetchData} disabled={isLoading}>
-              <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-              Actualizar
-            </Button>
           </div>
           <div className="rounded-md border">
-            <DataTable columns={columnsConfig} data={filteredUsers} />
+            <DataTable columns={columnsConfig} data={users} />
           </div>
           {paginationInfo && (
             <div className="mt-4">

@@ -64,13 +64,8 @@ const ClientPage = () => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="container mx-auto py-10 px-4 sm:px-6 lg:px-8"
-    >
-      <Card>
+    <>
+      <Card className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
         <CardHeader className="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
           <CardTitle className="text-2xl font-bold">
             Gestión de Clientes
@@ -110,7 +105,7 @@ const ClientPage = () => {
         onOpenChange={setIsDialogOpen}
         onUserCreated={handleCustomerCreated}
       />
-    </motion.div>
+    </>
   );
 };
 
